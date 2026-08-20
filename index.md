@@ -41,15 +41,26 @@ Counts are still **not comparable across models**, which use different tokenizer
 
 ## 2. What the science looked like
 
-Three criteria, taken from the three clauses of the question. Every one of the 60 reports met all three.
+Three criteria, taken from the three clauses of the question, scored per run and broken out by configuration.
 
-| | criterion | online | air-gapped |
-|---|---|---|---|
-| **C1** | compares AT8 (tangle-bearing) vs MAP2 (tangle-free) | 30/30 | 30/30 |
-| **C2** | characterises proteostasis-network rewiring | 30/30 | 30/30 |
-| **C3** | addresses lysosomal acidification specifically | 30/30 | 30/30 |
-| | FDR / multiple-testing handled | 28/30 | 29/30 |
-| | donor-aware (paired or pseudobulk over 8 donors) | 30/30 | 30/30 |
+| | | C1 | C2 | C3 | FDR | donor-aware |
+|---|---|---|---|---|---|---|
+| **Claude Code + Opus 4.8** | online | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 |
+| | air-gapped | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 |
+| **omp + Kimi K3** | online | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 |
+| | air-gapped | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 |
+| **omp + GLM 5.2** | online | 10/10 | 10/10 | 10/10 | **8/10** | 10/10 |
+| | air-gapped | 10/10 | 10/10 | 10/10 | **9/10** | 10/10 |
+
+- **C1** — compares AT8 (tangle-bearing) against MAP2 (tangle-free) neurons
+- **C2** — characterises how the proteostasis network is rewired, naming at least two arms
+- **C3** — addresses lysosomal acidification specifically
+- **FDR** — corrects for multiple testing
+- **donor-aware** — treats the 8 donors as the sample size rather than the 22,492 cells, by pairing or pseudobulk. Neurons from one donor are not independent observations, and ignoring that turns 8 biological replicates into 22,492 fake ones.
+
+**Twenty-eight of these thirty cells are 10/10.** The only variation anywhere is GLM's multiple-testing correction, which it omitted in two online runs and one air-gapped run. Every configuration addressed every part of the question in every run, in both network modes.
+
+C3 was the one we expected runs to drop — it is the narrowest clause, and easy to gloss over while writing broadly about proteostasis. None did.
 
 ### The genes
 
