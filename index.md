@@ -69,9 +69,6 @@ Three criteria, taken from the three clauses of the question. Every one of the 6
 | **C3** | addresses lysosomal acidification specifically | 30/30 | 30/30 |
 | | FDR / multiple-testing handled | 28/30 | 29/30 |
 | | donor-aware (paired or pseudobulk over 8 donors) | 30/30 | 30/30 |
-| | falsely claims a control-vs-AD contrast | **0/30** | **0/30** |
-
-That last row matters. The dataset cannot support a comparison against healthy brain — every cell is Braak VI. No run claimed one.
 
 ### The genes
 
