@@ -19,22 +19,7 @@ Every run got 10 iterations. All 60 completed. No failures.
 
 ## 1. Run statistics
 
-Per run, averaged over 10. Every metric is shown for both network modes.
-
-| | Claude Code + Opus 4.8 | omp + Kimi K3 | omp + GLM 5.2 |
-|---|---|---|---|
-| **runtime** — online | 35.5 min | 48.2 min | 80.5 min |
-| **runtime** — air-gapped | 33.9 min | 42.1 min | 67.6 min |
-| **tool calls** — online | 83.7 | 130.0 | 191.0 |
-| **tool calls** — air-gapped | 81.7 | 106.2 | 142.6 |
-| `execute_code` — online | 28.4 | 37.0 | 57.5 |
-| `execute_code` — air-gapped | 29.1 | 32.8 | 48.4 |
-| **literature searches** — online | 11.0 | 17.8 | 36.7 |
-| **literature searches** — air-gapped | 11.0 | 12.9 | 22.0 |
-| **papers cited** — online | 7.3 | 14.5 | 31.9 |
-| **papers cited** — air-gapped | 7.8 | 18.6 | 26.9 |
-| **findings recorded** — online | 12.4 | 16.8 | 24.2 |
-| **findings recorded** — air-gapped | 12.4 | 15.2 | 19.2 |
+![Run statistics: runtime, tool calls, execute_code calls, literature searches, papers cited and findings recorded, for three configurations in online and air-gapped modes](run-statistics.png)
 
 **Air-gapped is faster** — 5% to 16% — for all three. The likely cause is unglamorous: a local Postgres full-text index answers in 0.05–0.4 s where NCBI round-trips take seconds, and these runs make 11–37 literature calls each.
 
