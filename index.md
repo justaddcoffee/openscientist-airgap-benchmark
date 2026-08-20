@@ -64,18 +64,15 @@ C3 was the one we expected runs to drop — it is the narrowest clause, and easy
 
 ### The genes
 
-Symbols by how many of the 60 independent reports name them. Cell-type markers from the dataset's own labels (`CUX2`, `LAMP5`, `COL5A2`) are excluded.
+![Heatmap of how many reports name each gene, by model and network mode, with the distribution of how widely genes are shared and the gene-set overlap by pair type](gene-convergence.png)
 
-| system | genes | reports |
-|---|---|---|
-| **V-ATPase pump + assembly** | ATP6V1B2, ATP6AP1, ATP6AP2, ATP6V1G1, ATP6V1C1, **ATP6V1H**, ATP6V1F, VMA21 | 38–59 / 60 |
-| **Transcriptional control** | **TFEB** (60/60), TFE3, ATF4, DDIT3/CHOP, XBP1 | 38–60 / 60 |
-| **Lysosome / autophagy** | LAMP1, CTSB, CTSD, SQSTM1, PSAP, MCOLN1, STX17 | 35–55 / 60 |
-| **Counter-ion channels** | CLCN7, OSTM1, TMEM175 | 39–43 / 60 |
-| **mTORC1 platform** | RRAGA, RRAGC | 37 / 60 |
-| **Chaperone** | HSP90AA1 | 39 / 60 |
+Symbols are counted against the dataset's own 33,091 gene names, so a token only counts if it is a gene the experiment actually measured. Genes the dataset sorts cells by (`MAP2`, `CUX2`, `LAMP5`) are excluded as bookkeeping.
 
-**TFEB appears in all 60 reports. ATP6V1B2 in 59.**
+**A small shared core, a large idiosyncratic periphery.** The top of the heatmap is dark everywhere — the V-ATPase subunits and assembly factors (ATP6V1B2/C1/G1/H, ATP6AP1/2, VMA21), the TFEB/TFE3 transcriptional axis, the integrated stress response (ATF4, DDIT3), lysosome and autophagy machinery (LAMP1, CTSB, SQSTM1, PSAP) and the counter-ion channels (CLCN7, OSTM1, TMEM175). TFEB is named in all 60 reports, ATP6V1B2 in 59. But that core is thin: of the 230 genes named by at least 3 runs of any configuration, only 30 are named by all six and 78 by exactly one.
+
+**Which genes you get depends on the model, not the network.** Two configurations running the same model in opposite network modes share 54% of their gene sets. Two running different models share 38% — the same as two sharing neither model nor mode. Air-gapping a model does not change what it looks at; swapping the model does. This is visible directly in the heatmap, where each model's two columns are adjacent: the pairs match each other more closely than they match their neighbours.
+
+The model-specific signatures are legible too. Opus reaches for the ER stress arm and the V1 sector (XBP1 19/20, ATP6V1F 19/20) and largely ignores autophagosome fusion (STX17 5/20); Kimi does the reverse (STX17 17/20, MCOLN1 18/20, TMEM175 19/20, XBP1 8/20).
 
 ### The finding that replicates
 
@@ -95,7 +92,7 @@ Same data, same prompt, ten runs each. **omp + GLM leans systematically toward f
 
 ### One hypothesis worth following
 
-Runs on *both* omp configs (Kimi K3 and GLM 5.2) independently name **ATP6V1H** — the V1 peripheral-stalk subunit that couples V1 to V0 — as selectively downregulated, and propose it as why pump upregulation fails to deliver acidification. It appears in 43 of 60 reports. Nobody prompted for it. It is specific, mechanistic, and testable.
+All three configurations name **ATP6V1H** — the V1 peripheral-stalk subunit that couples V1 to V0 — as selectively downregulated (43 of 60 reports), and the omp runs go further and propose it as *why* pump upregulation fails to deliver acidification. Nobody prompted for it. It is specific, mechanistic, and testable.
 
 ---
 
@@ -105,6 +102,7 @@ Runs on *both* omp configs (Kimi K3 and GLM 5.2) independently name **ATP6V1H** 
 - **Criteria C1–C3 are keyword-based.** They establish a topic was addressed, not that it was addressed correctly. Reported cell counts were separately checked against ground truth: 59 of 60 accurate.
 - **Air-gapped literature search is weaker than it looks.** The mirror ANDs every query term, so ~37% of individual searches return nothing even after we told the agents about it. Citation counts held up anyway, because the agents retry with shorter queries.
 - **Air-gapped runs record no usage data in the database.** Token accounting is written alongside a cost estimate that fetches a pricing table over the network, which the firewall blocks — so the whole record fails to write. The token figures above were recovered from container logs.
+- **Gene mentions are token matches.** A gene named once in passing counts the same as one a report is built around, and matching is case-sensitive against the dataset vocabulary.
 - **n = 10 per cell.** Enough to see the interpretation split; not enough to rank models on quality.
 
 Full provenance — prompt checksum, data md5, image digests, per-run job IDs — is kept with the runs. Software: OpenScientist at `5a310f6`, claude-agent-sdk 0.2.136 (Claude Code CLI 2.1.228), omp 17.1.5, scanpy 1.12, on Azure AI Foundry.
