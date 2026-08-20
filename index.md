@@ -98,8 +98,6 @@ All three configurations name **ATP6V1H** — the V1 peripheral-stalk subunit th
 
 - **These are unreviewed machine outputs.** No human scientist has checked them.
 - **Criteria C1–C3 are keyword-based.** They establish a topic was addressed, not that it was addressed correctly. Reported cell counts were separately checked against ground truth: 59 of 60 accurate.
-- **Air-gapped literature search is weaker than it looks.** The mirror ANDs every query term, so ~37% of individual searches return nothing even after we told the agents about it. Citation counts held up anyway, because the agents retry with shorter queries.
-- **Air-gapped runs record no usage data in the database.** Token accounting is written alongside a cost estimate that fetches a pricing table over the network, which the firewall blocks — so the whole record fails to write. The token figures above were recovered from container logs.
 - **Gene mentions are token matches.** A gene named once in passing counts the same as one a report is built around, and matching is case-sensitive against the dataset vocabulary.
 - **n = 10 per cell.** Enough to see the interpretation split; not enough to rank models on quality.
 
