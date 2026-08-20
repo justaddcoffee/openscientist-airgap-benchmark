@@ -96,7 +96,9 @@ Same data, same prompt, ten runs each. **omp + GLM leans systematically toward f
 
 ### One hypothesis worth following
 
-All three configurations name **ATP6V1H** — the V1 peripheral-stalk subunit that couples V1 to V0 — as selectively downregulated (43 of 60 reports), and the omp runs go further and propose it as *why* pump upregulation fails to deliver acidification. Nobody prompted for it. It is specific, mechanistic, and testable.
+In an otherwise coordinated upregulation, one subunit moves the other way. **ATP6V1H** — the V1 peripheral-stalk subunit that couples the catalytic V1 head to the V0 proton pore — is reported as the one V-ATPase component that fails to rise in tangle-bearing neurons, and mostly as actively falling: 35 of 60 reports, across all three models. The mechanism proposed is that the neuron transcribes more pump parts without assembling more competent pumps, which would explain why upregulation does not deliver acidification. Nobody prompted for it, and it is testable.
+
+It is also thin, and the runs say so themselves. The effect is Δ ≈ −0.07 to −0.19 log units with donor-paired FDR between 0.02 and 0.08 depending on the model, and Opus's runs mostly call it non-significant — "the sole exception… did not increase" rather than a decrease. One run flagged that per-donor ATP6V1H deltas track sequencing depth (ρ = 0.95) and that the effect disappears (p = 0.23) in a pooled QC-adjusted model while holding in donor-paired ones; another noted that n = 8 donors bounds the minimum Wilcoxon p at 0.0078, so it may be underpowered rather than absent.
 
 ---
 
