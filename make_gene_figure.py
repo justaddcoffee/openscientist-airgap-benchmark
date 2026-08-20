@@ -29,9 +29,12 @@ ORDER = [("Opus 4.8", "online"), ("Opus 4.8", "air-gapped"),
 # Genes named by at least half the runs overall, grouped by the part of the machinery
 # they belong to. Within a group, ordered by how many of the 60 reports name them.
 GROUPS = [
-    ("V-ATPase V1 sector",   ["ATP6V1B2", "ATP6V1G1", "ATP6V1C1", "ATP6V1H", "ATP6V1F", "ATP6V1E1"]),
-    ("V-ATPase V0 sector",   ["ATP6V0B", "ATP6V0D1"]),
-    ("V-ATPase assembly",    ["ATP6AP1", "ATP6AP2", "VMA21", "TMEM199"]),
+    # V1 (cytosolic ATPase head) and V0 (membrane proton pore) are one complex and move
+    # together here, so they share a block. The assembly factors below are ER chaperones
+    # that build V0 and depart — naming one is a claim about biogenesis, not the pump.
+    ("V-ATPase pump",     ["ATP6V1B2", "ATP6V1G1", "ATP6V1C1", "ATP6V1H", "ATP6V1F",
+                           "ATP6V1E1", "ATP6V0B", "ATP6V0D1"]),
+    ("V-ATPase assembly", ["ATP6AP1", "ATP6AP2", "VMA21", "TMEM199"]),
     ("Ion channels",         ["CLCN7", "OSTM1", "TMEM175", "MCOLN1"]),
     ("Transcriptional\ncontrol", ["TFEB", "TFE3", "NFE2L2"]),
     ("Stress response",      ["ATF4", "DDIT3", "XBP1", "HSPA5"]),

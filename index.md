@@ -70,7 +70,7 @@ Symbols are counted against the dataset's own 33,091 gene names, so a token only
 
 Every configuration lands on the same machinery: the V-ATPase pump and the factors that assemble it, the TFEB/TFE3 transcriptional axis, the integrated stress response, lysosomal hydrolases, autophagy, and the counter-ion channels the pump depends on. TFEB is named in all 60 reports, ATP6V1B2 in 59.
 
-Coverage *within* those systems is where the models differ. Opus is thorough on the pump sectors themselves (ATP6V1F 19/20, ATP6V1E1 19/20, TMEM199 18/20) and thin on autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20); Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
+Coverage *within* those systems is where the models differ. Opus is thorough on the pump itself (ATP6V1F 19/20, ATP6V1E1 19/20, ATP6V0B 17/20) and thin on autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20); Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
 
 ### The finding that replicates
 
