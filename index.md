@@ -1,6 +1,6 @@
-## Can open models do this with no internet?
+## Feasibility of AI co-scientist performance using open models in offline (air-gapped) mode
 
-Two open-weight models and one frontier model, each run 10 times on the same Alzheimer's question through [OpenScientist](https://openscientist.io), online and then behind a full air gap. Sixty runs, to see whether a self-hostable model with no network access can do the analysis a hosted frontier model does with live PubMed.
+Sixty runs: two open-weight models (Kimi K3, GLM 5.2) and one frontier model (Opus 4.8), each given the same Alzheimer's dataset and question through [OpenScientist](https://openscientist.io) 10 times — online, then behind a full air gap.
 
 The question came from Mathieu Bourdenx, verbatim:
 

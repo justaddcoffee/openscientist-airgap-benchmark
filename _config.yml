@@ -1,3 +1,3 @@
-title: Can open models do this with no internet?
-description: 60 autonomous runs of one Alzheimer's question — online vs air-gapped, Opus 4.8 vs Kimi K3 vs GLM 5.2
+title: Feasibility of AI co-scientist performance using open models in offline (air-gapped) mode
+description: Can a self-hosted open model, with no network access, do the analysis a hosted frontier model does? 60 runs of one Alzheimer's question.
 theme: jekyll-theme-cayman
