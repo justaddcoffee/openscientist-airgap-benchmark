@@ -1,6 +1,6 @@
-## The experiment
+## Can open models do this with no internet?
 
-Sixty autonomous runs of one question, through [OpenScientist](https://openscientist.io).
+Two open-weight models and one frontier model, each run 10 times on the same Alzheimer's question through [OpenScientist](https://openscientist.io), online and then behind a full air gap. Sixty runs, to see whether a self-hostable model with no network access can do the analysis a hosted frontier model does with live PubMed.
 
 The question came from Mathieu Bourdenx, verbatim:
 
