@@ -64,15 +64,13 @@ C3 was the one we expected runs to drop — it is the narrowest clause, and easy
 
 ### The genes
 
-![Heatmap of how many reports name each gene, by model and network mode, with the distribution of how widely genes are shared and the gene-set overlap by pair type](gene-convergence.png)
+![Heatmap of how many of each configuration's 10 reports name each gene, grouped by functional system, for three models in online and air-gapped modes](gene-convergence.png)
 
 Symbols are counted against the dataset's own 33,091 gene names, so a token only counts if it is a gene the experiment actually measured. Genes the dataset sorts cells by (`MAP2`, `CUX2`, `LAMP5`) are excluded as bookkeeping.
 
-**A small shared core, a large idiosyncratic periphery.** The top of the heatmap is dark everywhere — the V-ATPase subunits and assembly factors (ATP6V1B2/C1/G1/H, ATP6AP1/2, VMA21), the TFEB/TFE3 transcriptional axis, the integrated stress response (ATF4, DDIT3), lysosome and autophagy machinery (LAMP1, CTSB, SQSTM1, PSAP) and the counter-ion channels (CLCN7, OSTM1, TMEM175). TFEB is named in all 60 reports, ATP6V1B2 in 59. But that core is thin: of the 230 genes named by at least 3 runs of any configuration, only 30 are named by all six and 78 by exactly one.
+Every configuration lands on the same machinery: the V-ATPase pump and the factors that assemble it, the TFEB/TFE3 transcriptional axis, the integrated stress response, lysosomal hydrolases, autophagy, and the counter-ion channels the pump depends on. TFEB is named in all 60 reports, ATP6V1B2 in 59.
 
-**Which genes you get depends on the model, not the network.** Two configurations running the same model in opposite network modes share 54% of their gene sets. Two running different models share 38% — the same as two sharing neither model nor mode. Air-gapping a model does not change what it looks at; swapping the model does. This is visible directly in the heatmap, where each model's two columns are adjacent: the pairs match each other more closely than they match their neighbours.
-
-The model-specific signatures are legible too. Opus reaches for the ER stress arm and the V1 sector (XBP1 19/20, ATP6V1F 19/20) and largely ignores autophagosome fusion (STX17 5/20); Kimi does the reverse (STX17 17/20, MCOLN1 18/20, TMEM175 19/20, XBP1 8/20).
+Coverage *within* those systems is where the models differ. Opus is thorough on the pump sectors themselves (ATP6V1F 19/20, ATP6V1E1 19/20, TMEM199 18/20) and thin on autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20); Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
 
 ### The finding that replicates
 
