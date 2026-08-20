@@ -19,18 +19,26 @@ Every run got 10 iterations. All 60 completed. No failures.
 
 ## 1. Run statistics
 
-Per run, averaged over 10.
+Per run, averaged over 10. Every metric is shown for both network modes.
 
-| | Opus 4.8 | Kimi K3 | GLM 5.2 |
+| | Claude Code + Opus 4.8 | omp + Kimi K3 | omp + GLM 5.2 |
 |---|---|---|---|
 | **runtime** — online | 35.5 min | 48.2 min | 80.5 min |
-| **runtime** — air-gapped | **33.9 min** | **42.1 min** | **67.6 min** |
-| tool calls | 84 | 106–130 | 143–191 |
-| `execute_code` calls | 29 | 33–37 | 48–58 |
-| literature searches | 11 | 13–18 | 22–37 |
-| papers cited | 7–8 | 15–19 | 27–32 |
+| **runtime** — air-gapped | 33.9 min | 42.1 min | 67.6 min |
+| **tool calls** — online | 83.7 | 130.0 | 191.0 |
+| **tool calls** — air-gapped | 81.7 | 106.2 | 142.6 |
+| `execute_code` — online | 28.4 | 37.0 | 57.5 |
+| `execute_code` — air-gapped | 29.1 | 32.8 | 48.4 |
+| **literature searches** — online | 11.0 | 17.8 | 36.7 |
+| **literature searches** — air-gapped | 11.0 | 12.9 | 22.0 |
+| **papers cited** — online | 7.3 | 14.5 | 31.9 |
+| **papers cited** — air-gapped | 7.8 | 18.6 | 26.9 |
+| **findings recorded** — online | 12.4 | 16.8 | 24.2 |
+| **findings recorded** — air-gapped | 12.4 | 15.2 | 19.2 |
 
 **Air-gapped is faster** — 5% to 16% — for all three. The likely cause is unglamorous: a local Postgres full-text index answers in 0.05–0.4 s where NCBI round-trips take seconds, and these runs make 11–37 literature calls each.
+
+**GLM does the most work by a wide margin** — roughly twice Opus's tool calls and code executions, and three times its literature searches — which is where its longer runtime goes.
 
 ### Tokens
 
@@ -38,13 +46,13 @@ Per run, air-gapped. The five buckets are non-overlapping.
 
 | | input | output | cache read | cache write |
 |---|---|---|---|---|
-| Opus 4.8 | 469 | 111,778 | **18,309,951** | 874,857 |
-| Kimi K3 | 380,144 | 109,177 | 5,324,243 | 0 |
-| GLM 5.2 | 796,482 | 163,352 | 7,992,347 | 0 |
+| Claude Code + Opus 4.8 | 469 | 111,778 | **18,309,951** | 874,857 |
+| omp + Kimi K3 | 380,144 | 109,177 | 5,324,243 | 0 |
+| omp + GLM 5.2 | 796,482 | 163,352 | 7,992,347 | 0 |
 
-Cache reads dominate everything — an agent loop re-sends its whole conversation each turn. For Opus that's 94% of all tokens.
+Cache reads dominate everything — an agent loop re-sends its whole conversation each turn. For Claude Code + Opus that's 94% of all tokens.
 
-Two things make the raw counts non-comparable across models. Each uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* while Fireworks has no cache-write meter and books them as *input* — so Opus's tiny input figure is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
+Two things make the raw counts non-comparable across models. Each uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* while Fireworks has no cache-write meter and books them as *input* — so the Opus row's tiny input figure is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
 
 ---
 
@@ -85,15 +93,15 @@ Whether that upregulation means acidification actually *increases*, or is a futi
 
 | | reads as increased | reads as impaired |
 |---|---|---|
-| Opus 4.8 | 4 | 4 |
-| Kimi K3 | 3 | 3 |
-| **GLM 5.2** | 3 | **7** |
+| Claude Code + Opus 4.8 | 4 | 4 |
+| omp + Kimi K3 | 3 | 3 |
+| **omp + GLM 5.2** | 3 | **7** |
 
-Same data, same prompt, ten runs each. **GLM leans systematically toward futile compensation; Opus and Kimi split evenly.** For anyone planning to run this once, that is the result: the measurement is reproducible, the conclusion is not.
+Same data, same prompt, ten runs each. **omp + GLM leans systematically toward futile compensation; the other two split evenly.** For anyone planning to run this once, that is the result: the measurement is reproducible, the conclusion is not.
 
 ### One hypothesis worth following
 
-Runs across *both* omp models independently name **ATP6V1H** — the V1 peripheral-stalk subunit that couples V1 to V0 — as selectively downregulated, and propose it as why pump upregulation fails to deliver acidification. It appears in 43 of 60 reports. Nobody prompted for it. It is specific, mechanistic, and testable.
+Runs on *both* omp configs (Kimi K3 and GLM 5.2) independently name **ATP6V1H** — the V1 peripheral-stalk subunit that couples V1 to V0 — as selectively downregulated, and propose it as why pump upregulation fails to deliver acidification. It appears in 43 of 60 reports. Nobody prompted for it. It is specific, mechanistic, and testable.
 
 ---
 
