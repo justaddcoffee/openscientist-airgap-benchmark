@@ -25,13 +25,19 @@ mpl.rcParams.update({
 CONFIGS = ["Claude Code\n+ Opus 4.8", "omp\n+ Kimi K3", "omp\n+ GLM 5.2"]
 COLOR = ["#0072B2", "#E69F00", "#009E73"]
 
-# per run, mean of 10.  (title, online triple, air-gapped triple)
+# per run, mean of 10.
+# Input and cache write are combined: they are the same thing accounted differently.
+# Anthropic books a prompt token's first occurrence as cache write; Fireworks has no
+# cache-write meter and books it as input. Shown separately they suggest Opus sends a
+# 469-token prompt, which is an artefact of the meter, not a fact about the model.
+INPUT_ON,  INPUT_AIR  = [481, 322_518, 780_949],  [469, 380_144, 796_482]
+CWRITE_ON, CWRITE_AIR = [884_136, 0, 0],          [874_857, 0, 0]
+
 PANELS = [
-    ("Input *",      [481, 322_518, 780_949],        [469, 380_144, 796_482]),
+    ("Prompt, first pass", None, None),          # stacked: input + cache write
     ("Output",       [115_079, 113_776, 222_867],    [111_778, 109_177, 163_352]),
     ("Cache read",   [19_352_234, 5_949_713, 10_954_975],
                      [18_309_951, 5_324_243, 7_992_347]),
-    ("Cache write *", [884_136, 0, 0],               [874_857, 0, 0]),
 ]
 
 
@@ -45,13 +51,25 @@ def fmt(v):
     return f"{v:g}"
 
 
-fig, axes = plt.subplots(1, 4, figsize=(13.5, 3.9))
+fig, axes = plt.subplots(1, 3, figsize=(11.5, 4.1))
 x = np.arange(3)
 w = 0.38
 
 for ax, (title, online, air) in zip(axes, PANELS):
-    ax.bar(x - w/2, online, w, color=COLOR, edgecolor="white", linewidth=0.6)
-    ax.bar(x + w/2, air, w, color="white", edgecolor=COLOR, linewidth=1.4, hatch="///")
+    if online is None:                      # the stacked prompt panel
+        online = [i + c for i, c in zip(INPUT_ON, CWRITE_ON)]
+        air    = [i + c for i, c in zip(INPUT_AIR, CWRITE_AIR)]
+        # lower segment = tokens the provider meters as input
+        ax.bar(x - w/2, INPUT_ON, w, color=COLOR, edgecolor="white", linewidth=0.6)
+        ax.bar(x + w/2, INPUT_AIR, w, color="white", edgecolor=COLOR, linewidth=1.4, hatch="///")
+        # upper segment = tokens metered as cache write (Anthropic only)
+        ax.bar(x - w/2, CWRITE_ON, w, bottom=INPUT_ON, color=COLOR, alpha=0.40,
+               edgecolor="white", linewidth=0.6)
+        ax.bar(x + w/2, CWRITE_AIR, w, bottom=INPUT_AIR, color="white", alpha=0.40,
+               edgecolor=COLOR, linewidth=1.4, hatch="///")
+    else:
+        ax.bar(x - w/2, online, w, color=COLOR, edgecolor="white", linewidth=0.6)
+        ax.bar(x + w/2, air, w, color="white", edgecolor=COLOR, linewidth=1.4, hatch="///")
     top = max(max(online), max(air))
     for xi, (o, a) in enumerate(zip(online, air)):
         ax.text(xi - w/2, o + top*0.02, fmt(o), ha="center", va="bottom", fontsize=7.2)
@@ -67,15 +85,17 @@ for ax, (title, online, air) in zip(axes, PANELS):
 axes[0].set_ylabel("tokens per run")
 
 fig.legend(handles=[Patch(facecolor="#888888", edgecolor="white", label="online"),
-                    Patch(facecolor="white", edgecolor="#888888", hatch="///",
-                          label="air-gapped")],
-           frameon=False, ncol=2, loc="upper right", bbox_to_anchor=(0.995, 1.08),
-           fontsize=9)
+                    Patch(facecolor="white", edgecolor="#888888", hatch="///", label="air-gapped"),
+                    Patch(facecolor="#888888", edgecolor="white", label="metered as input"),
+                    Patch(facecolor="#888888", alpha=0.40, edgecolor="white",
+                          label="metered as cache write")],
+           frameon=False, ncol=4, loc="upper right", bbox_to_anchor=(0.995, 1.10),
+           fontsize=8.2)
 fig.suptitle("Token use per run, mean of 10 — note each panel has its own scale",
              x=0.008, ha="left", fontsize=11, fontweight="bold", y=1.06)
 fig.text(0.008, -0.10,
-         "* Input and cache write are not comparable across providers. Anthropic books first-occurrence prompt tokens as cache write; Fireworks has no cache-write meter and books the same tokens as input.\n"
-         "Only the sum is comparable: 875k / 380k / 796k air-gapped. Token counts are also not comparable across models, which use different tokenizers.",
+         "Prompt tokens are shown as one bar because providers meter them differently: Anthropic books a token's first occurrence as cache write, Fireworks has no cache-write meter and books it as input. Only the sum compares.\n"
+         "The shading shows which meter each provider used — the split is an accounting artefact, not a difference in how much prompt the agent sent. Counts still are not comparable across models, which use different tokenizers.",
          ha="left", va="top", fontsize=7.3, color="#555555", linespacing=1.5)
 fig.tight_layout()
 fig.savefig("token-usage.png", bbox_inches="tight", facecolor="white")

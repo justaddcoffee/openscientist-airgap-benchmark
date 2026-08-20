@@ -33,7 +33,9 @@ Cache reads dominate everything, because an agent loop re-sends its whole conver
 
 Air-gapped uses slightly **fewer** tokens across the board — the same pattern as runtime, and for the same reason: fewer, cheaper literature round-trips.
 
-Two things make the raw counts non-comparable. Each model uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* where Fireworks has no cache-write meter and books them as *input* — so the Opus input bar is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
+**Input and cache write are shown as one bar** because they are the same quantity metered two ways: Anthropic books a prompt token's first occurrence as *cache write*, Fireworks has no cache-write meter and books it as *input*. Split apart they imply Claude Code + Opus sends a 469-token prompt, which is an artefact of the meter rather than a fact about the model. The shading shows which meter each provider used — Opus books 884k of its 885k prompt tokens as cache write; both omp configs book all of theirs as input.
+
+Counts are still **not comparable across models**, which use different tokenizers. The useful comparison is within a model, between modes.
 
 ---
 
