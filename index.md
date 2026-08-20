@@ -17,7 +17,7 @@ Every run got 10 iterations. All 60 completed. No failures.
 
 ---
 
-## 1. What it took to run
+## 1. Run statistics
 
 Per run, averaged over 10.
 
