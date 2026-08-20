@@ -17,7 +17,7 @@ Every run got 10 iterations. All 60 completed. No failures.
 
 ---
 
-## 1. What it cost to run
+## 1. What it took to run
 
 Per run, averaged over 10.
 
@@ -45,16 +45,6 @@ Per run, air-gapped. The five buckets are non-overlapping.
 Cache reads dominate everything — an agent loop re-sends its whole conversation each turn. For Opus that's 94% of all tokens.
 
 Two things make the raw counts non-comparable across models. Each uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* while Fireworks has no cache-write meter and books them as *input* — so Opus's tiny input figure is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
-
-### Cost
-
-| | online | air-gapped |
-|---|---|---|
-| Opus 4.8 | $8.48 | **$8.18** |
-| Kimi K3 | $4.91 | **$4.81** |
-| GLM 5.2 | $3.92 | **$3.22** |
-
-Opus is shown at rates implied by settled Azure billing, which came in at roughly **a third of Anthropic's list price for the cache buckets** — at list it would read $17–18. GLM's rates are Azure's own published prices. **Kimi has no Azure meter at all** and has so far been billed **$0**; its figure uses Fireworks' list price ×1.1 for the DataZone premium, and should be read as what it will cost once Azure prices it.
 
 ---
 
@@ -112,7 +102,7 @@ Runs across *both* omp models independently name **ATP6V1H** — the V1 peripher
 - **These are unreviewed machine outputs.** No human scientist has checked them.
 - **Criteria C1–C3 are keyword-based.** They establish a topic was addressed, not that it was addressed correctly. Reported cell counts were separately checked against ground truth: 59 of 60 accurate.
 - **Air-gapped literature search is weaker than it looks.** The mirror ANDs every query term, so ~37% of individual searches return nothing even after we told the agents about it. Citation counts held up anyway, because the agents retry with shorter queries.
-- **Air-gapped runs record no cost data.** Cost tracking fetches a pricing table over the network, which the firewall blocks; the token figures above were recovered from container logs.
+- **Air-gapped runs record no usage data in the database.** Token accounting is written alongside a cost estimate that fetches a pricing table over the network, which the firewall blocks — so the whole record fails to write. The token figures above were recovered from container logs.
 - **n = 10 per cell.** Enough to see the interpretation split; not enough to rank models on quality.
 
 Full provenance — prompt checksum, data md5, image digests, per-run job IDs — is kept with the runs. Software: OpenScientist at `5a310f6`, claude-agent-sdk 0.2.136 (Claude Code CLI 2.1.228), omp 17.1.5, scanpy 1.12, on Azure AI Foundry.
