@@ -13,6 +13,8 @@ Two variables, 10 repeats each:
 
 Every run got 10 iterations. All 60 completed. No failures.
 
+**Inference is the one carved-out exception.** The agent container has no route to the internet — the data, the code execution and the literature search are all local. Model inference is the single permitted egress, forwarded by the local proxy to a trusted API: here Azure AI Foundry, which also holds the credential the container never sees. Kimi K3 and GLM 5.2 are open-weight, so for those two this is a deployment choice rather than a dependency — it moves on-prem as soon as we source inference hardware, with nothing else about the setup changing. Opus 4.8 is hosted and would still need the exception.
+
 ---
 
 ## 1. Run statistics
