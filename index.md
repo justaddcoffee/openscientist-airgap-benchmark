@@ -72,6 +72,12 @@ Every configuration lands on the same machinery: the V-ATPase pump and the facto
 
 Transcriptional control leads: TFEB appears in all 60 reports, TFE3 in 56. The disagreement collects in autophagy, the ion channels and pump assembly, where a gene can be near-universal for one model and nearly absent for another — Opus is thorough on the pump itself (ATP6V1F 19/20, ATP6V1E1 19/20) and barely touches autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20), while Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
 
+**Which genes get analysed follows the model, not the network.** Two configurations running the same model in opposite network modes overlap 54%. Two running different models overlap 38% — the same as two sharing neither model nor mode. Sharing a network mode buys no similarity at all.
+
+![Gene-set overlap between pairs of configurations, grouped by whether the pair shares a model, a network mode, or neither](gene-overlap.png)
+
+Independent runs are not expected to name identical genes, which is why this compares pair *types* against each other rather than reading the absolute overlap: "sharing neither" sets the floor, and only the model beats it.
+
 ### The finding that replicates
 
 Every run agrees on the observation: **the V-ATPase proton pump and its assembly machinery are transcriptionally upregulated in tangle-bearing neurons** relative to tangle-free neurons from the same donor — coordinated across the V0 and V1 sectors, the ER assembly factors (ATP6AP1/2, VMA21) and the chloride counter-ion channels (CLCN7, OSTM1). The wider proteostasis network moves the same way, but unevenly: chaperone and lysosomal arms move most, proteasome and autophagy lag.
