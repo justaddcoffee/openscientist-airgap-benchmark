@@ -27,17 +27,13 @@ Every run got 10 iterations. All 60 completed. No failures.
 
 ### Tokens
 
-Per run, air-gapped. The five buckets are non-overlapping.
+![Token use per run by bucket — input, output, cache read and cache write — for three configurations in online and air-gapped modes](token-usage.png)
 
-| | input | output | cache read | cache write |
-|---|---|---|---|---|
-| Claude Code + Opus 4.8 | 469 | 111,778 | **18,309,951** | 874,857 |
-| omp + Kimi K3 | 380,144 | 109,177 | 5,324,243 | 0 |
-| omp + GLM 5.2 | 796,482 | 163,352 | 7,992,347 | 0 |
+Cache reads dominate everything, because an agent loop re-sends its whole conversation each turn. For Claude Code + Opus that is 94% of all tokens.
 
-Cache reads dominate everything — an agent loop re-sends its whole conversation each turn. For Claude Code + Opus that's 94% of all tokens.
+Air-gapped uses slightly **fewer** tokens across the board — the same pattern as runtime, and for the same reason: fewer, cheaper literature round-trips.
 
-Two things make the raw counts non-comparable across models. Each uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* while Fireworks has no cache-write meter and books them as *input* — so the Opus row's tiny input figure is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
+Two things make the raw counts non-comparable. Each model uses a **different tokenizer**. And Anthropic books first-occurrence prompt tokens as *cache write* where Fireworks has no cache-write meter and books them as *input* — so the Opus input bar is an accounting convention, not efficiency. Add input + cache write and the three are 875k / 380k / 796k.
 
 ---
 
