@@ -68,9 +68,9 @@ C3 was the one we expected runs to drop — it is the narrowest clause, and easy
 
 Symbols are counted against the dataset's own 33,091 gene names, so a token only counts if it is a gene the experiment actually measured. Genes the dataset sorts cells by (`MAP2`, `CUX2`, `LAMP5`) are excluded as bookkeeping.
 
-Every configuration lands on the same machinery: the V-ATPase pump and the factors that assemble it, the TFEB/TFE3 transcriptional axis, the integrated stress response, lysosomal hydrolases, autophagy, and the counter-ion channels the pump depends on. TFEB is named in all 60 reports, ATP6V1B2 in 59.
+Every configuration lands on the same machinery: the V-ATPase pump and the factors that assemble it, the TFEB/TFE3 transcriptional axis, the integrated stress response, lysosomal hydrolases, autophagy, and the counter-ion channels the pump depends on.
 
-Coverage *within* those systems is where the models differ. Opus is thorough on the pump itself (ATP6V1F 19/20, ATP6V1E1 19/20, ATP6V0B 17/20) and thin on autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20); Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
+Rows and blocks are ordered by agreement — a gene's rank is the count of the configuration that named it *least*, so the top of the figure is where all six converge and the bottom is where they split. Transcriptional control leads: TFEB appears in all 60 reports, TFE3 in 56. The disagreement collects in autophagy, the ion channels and pump assembly, where a gene can be near-universal for one model and nearly absent for another — Opus is thorough on the pump itself (ATP6V1F 19/20, ATP6V1E1 19/20) and barely touches autophagosome–lysosome fusion (SNAP29 4/20, VAMP8 4/20), while Kimi is the reverse (SNAP29 17/20, VAMP8 15/20, ATP6V1F 6/20). Within a model, the online and air-gapped columns track each other closely.
 
 ### The finding that replicates
 

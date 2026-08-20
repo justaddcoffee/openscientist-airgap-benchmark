@@ -8,6 +8,11 @@ extract_gene_mentions.py against the run directories.
 Rows are grouped by function rather than ranked by frequency, so the block structure of
 the acidification machinery is visible. Columns are model-major, each model's online and
 air-gapped columns adjacent.
+
+Within a group, and between groups, rows are ordered by agreement rather than by total
+mentions: a gene's score is the count of the configuration that named it least. This
+separates "all six configurations kept finding this" from "half of them did, a lot" —
+two cases an overall total collapses together.
 """
 
 import itertools
@@ -27,7 +32,7 @@ ORDER = [("Opus 4.8", "online"), ("Opus 4.8", "air-gapped"),
          ("GLM 5.2", "online"), ("GLM 5.2", "air-gapped")]
 
 # Genes named by at least half the runs overall, grouped by the part of the machinery
-# they belong to. Within a group, ordered by how many of the 60 reports name them.
+# they belong to. Order within and between groups is computed from the data below.
 GROUPS = [
     # V1 (cytosolic ATPase head) and V0 (membrane proton pore) are one complex and move
     # together here, so they share a block. The assembly factors below are ER chaperones
@@ -48,7 +53,16 @@ GROUPS = [
 counts = json.load(open("gene-mentions.json"))["counts"]
 cols = [counts[f"{m}|{d}"] for m, d in ORDER]
 
-genes = [g for _, gs in GROUPS for g in gs]
+def agreement(g):
+    """How many runs the least enthusiastic configuration devoted to this gene."""
+    return min(c.get(g, 0) for c in cols)
+
+
+groups = [(name, sorted(gs, key=lambda g: (-agreement(g), -sum(c.get(g, 0) for c in cols))))
+          for name, gs in GROUPS]
+groups.sort(key=lambda ng: -np.mean([agreement(g) for g in ng[1]]))
+
+genes = [g for _, gs in groups for g in gs]
 M = np.array([[c.get(g, 0) for c in cols] for g in genes], dtype=float)
 
 fig, ax = plt.subplots(figsize=(6.4, 11.2))
@@ -68,7 +82,7 @@ for x in (1.5, 3.5):                                   # separate the model bloc
     ax.axvline(x, color="white", lw=3.5)
 
 row = 0                                                # group labels and separators
-for name, gs in GROUPS:
+for name, gs in groups:
     if row:
         ax.axhline(row - 0.5, color="white", lw=3.5)
     ax.text(-0.20, row + (len(gs) - 1) / 2, name, ha="right", va="center",
@@ -77,7 +91,10 @@ for name, gs in GROUPS:
     row += len(gs)
 
 ax.set_title("Reports naming each gene, out of 10 per configuration",
-             loc="left", fontweight="bold", pad=44, x=-0.62)
+             loc="left", fontweight="bold", pad=82, x=-0.62)
+ax.text(-0.62, 1.075, "Ordered by agreement — how many runs the configuration that named it "
+        "least devoted to it", transform=ax.transAxes, ha="left", va="bottom",
+        fontsize=8.4, color="#555555", linespacing=1.4)
 ax.tick_params(length=0)
 for s in ax.spines.values():
     s.set_visible(False)
@@ -87,4 +104,5 @@ cb.set_label("reports / 10", fontsize=8)
 cb.ax.tick_params(labelsize=7.5)
 
 fig.savefig("gene-convergence.png", bbox_inches="tight", facecolor="white")
-print(f"wrote gene-convergence.png — {len(genes)} genes in {len(GROUPS)} groups")
+print(f"wrote gene-convergence.png — {len(genes)} genes in {len(groups)} groups")
+print("group order:", [n for n, _ in groups])
