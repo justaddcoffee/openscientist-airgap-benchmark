@@ -39,7 +39,7 @@ Counts are still **not comparable across models**, which use different tokenizer
 
 ---
 
-## 2. What the science looked like
+## 2. Scientific content
 
 Three criteria, taken from the three clauses of the question, scored per run and broken out by configuration.
 
