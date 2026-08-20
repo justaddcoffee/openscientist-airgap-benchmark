@@ -1,4 +1,4 @@
-## What this is
+## The experiment
 
 Sixty autonomous runs of one question, through [OpenScientist](https://openscientist.io).
 
