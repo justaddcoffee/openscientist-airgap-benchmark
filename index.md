@@ -1,3 +1,7 @@
+## Summary
+
+For many biomedical use cases, data security and a guarantee of zero data egress is crucial. Current co-scientists support this poorly or not at all. We implemented an **air-gapped** version of OpenScientist that allows completely offline execution of the co-scientist workflow. PubMed, tool calling and code execution are contained to the local environment and guaranteed not to exfiltrate information. **Optional** exceptions can be made to allow LLM inference to be done via a specific remote API (e.g. AWS Bedrock for HIPAA compliance).
+
 Sixty runs: two open-weight models (Kimi K3, GLM 5.2) and one frontier model (Opus 4.8), each given the same Alzheimer's dataset and question through [OpenScientist](https://openscientist.io) 10 times — online, then behind a full air gap.
 
 The question came from Mathieu Bourdenx, verbatim:
